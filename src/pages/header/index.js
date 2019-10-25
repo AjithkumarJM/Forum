@@ -1,11 +1,28 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import cookie from 'react-cookies';
 
 class Header extends Component {
 
-    onSignOutClick = () => window.gapi.auth2.getAuthInstance().signOut();
+    componentDidMount() {
+        window.gapi.load('client:auth2', () => {
+            window.gapi.client.init({
+                clientId: '13004417870-6tvprqjkgo0fl0ndpdpamvtka0u8f641.apps.googleusercontent.com',
+                scope: 'email'
+            }).then(() => {
+                this.auth = window.gapi.auth2.getAuthInstance();
+            }, error => console.log(error))
+        })
+    }
+
+    onSignOutClick = () => {
+        this.auth.signOut();
+        cookie.remove('isAuthenticated', { path: '/' })
+        window.location.reload();
+    }
 
     render() {
+        console.log(this.auth)
         return (
             <div className="ui secondary  menu shadow">
                 <div className="header item">
