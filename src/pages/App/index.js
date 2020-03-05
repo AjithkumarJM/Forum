@@ -1,16 +1,21 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
+import cookie from 'react-cookies';
 
 import Dashboard from '../dashboard';
 import Header from '../header';
 import Login from '../login';
 
-class App extends PureComponent {
-    render() {
-        const { isSignedIn } = this.props;
+export default class App extends PureComponent {
 
-        if (isSignedIn) {
+    render() {
+        const isAuthenticated = cookie.load('isAuthenticated')
+
+        if (!isAuthenticated) {
+            return (
+                <div><Login /></div>
+            )
+        } else if (isAuthenticated) {
             return (
                 <BrowserRouter>
                     <Header />
@@ -19,14 +24,13 @@ class App extends PureComponent {
             )
         } else {
             return (
-                <div><Login /></div>
+                <div className="ui segment">
+                    <p></p>
+                    <div className="ui active dimmer">
+                        <div className="ui loader"></div>
+                    </div>
+                </div>
             )
         }
     }
 }
-
-const mapStateToProps = ({ auth }) => {
-    return { isSignedIn: auth.isSignedIn };
-};
-
-export default connect(mapStateToProps, {})(App);

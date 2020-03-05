@@ -1,28 +1,15 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
 
 export default class Dashboard extends Component {
-    // constructor(props) {
-    //     super(props)
-
-    //     this.state = {
-
-    //     }
-    // }
-
     render() {
         return (
-            <div className='mt-5'>Dashboard</div>
+            <ul className="list-group mt-5 p-5">
+                <li className="list-group-item">Cras justo odio</li>
+                <li className="list-group-item">Dapibus ac facilisis in</li>
+                <li className="list-group-item">Morbi leo risus</li>
+                <li className="list-group-item">Porta ac consectetur ac</li>
+                <li className="list-group-item">Vestibulum at eros</li>
+            </ul>
         )
     }
 }
-
-// const mapStateToProps = (state) => ({
-
-// })
-
-// const mapDispatchToProps = (dispatch) => ({
-
-// })
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

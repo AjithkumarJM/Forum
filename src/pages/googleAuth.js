@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import cookie from 'react-cookies';
 
 import { signOut, signIn } from '../services/googleOauth';
 
@@ -13,36 +14,28 @@ class GoogleAuth extends Component {
                 this.auth = window.gapi.auth2.getAuthInstance();
                 this.onAuthCahnge(this.auth.isSignedIn.get());
                 this.auth.isSignedIn.listen(this.onAuthCahnge);
-            })
+            }, error => console.log(error))
         })
     }
 
     onAuthCahnge = isSignedIn => {
         const { signIn, signOut } = this.props;
-        console.log(isSignedIn);
-        if (isSignedIn) signIn();
-        else signOut();
+
+        if (isSignedIn) {
+            signIn(this.auth.currentUser.get().getId());
+            cookie.save('isAuthenticated', isSignedIn);
+            window.location.reload()
+        }
+        else {
+            signOut();
+            cookie.remove('isAuthenticated', { path: '/' })
+        }
     }
 
     onSignInClick = () => this.auth.signIn();
 
-    onSignOutClick = () => this.auth.signOut();
-
-    renderAuthButton = () => {
-        const { auth } = this.props;
-
-        if (auth === null) {
-            return null
-        }
-        else if (auth) {
-            return <div className="ui red button" onClick={this.onSignOutClick}>Sign Out</div>
-        } else {
-            return <div className="ui green button" onClick={this.onSignInClick}>Login With Google</div>
-        }
-    }
-
     render() {
-        return <div>{this.renderAuthButton()}</div>
+        return <div className="ui green button" onClick={this.onSignInClick}>Login With Google</div>
     }
 }
 
