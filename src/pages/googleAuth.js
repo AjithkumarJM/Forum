@@ -16,9 +16,6 @@ class GoogleAuth extends Component {
             })
         })
     }
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-    }
 
     onAuthCahnge = isSignedIn => {
         const { signIn, signOut } = this.props;
